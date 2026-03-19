@@ -4,21 +4,29 @@
 	import { fly } from 'svelte/transition';
 	import Turnstile from './Turnstile.svelte';
 	import { API_URL_BASE, TURNSTILE_SITEKEY } from './settings';
+	import { resolve } from '$app/paths';
 
-	let state = 'ready';
+	let readyState = $state('ready');
 
-	$: isLoading = state === 'loading';
+	let isLoading = $derived(readyState === 'loading');
 
-	let data = {
+	let data = $state({
 		name: '',
 		email: '',
 		phone: '',
 		message: '',
 		token: null
-	};
+	});
 
-	async function submit() {
-		state = 'loading';
+	/**
+	 * Contact form submission handler.
+	 *
+	 * @param e {SubmitEvent}
+	 */
+	async function submit(e) {
+		e.preventDefault();
+
+		readyState = 'loading';
 		try {
 			const response = await fetch(`${API_URL_BASE}/contact`, {
 				method: 'POST',
@@ -30,14 +38,14 @@
 			});
 			const json = await response.json();
 			if (json.success === true) {
-				state = 'success';
+				readyState = 'success';
 			} else {
-				state = 'error';
+				readyState = 'error';
 				console.error(json);
 			}
 		} catch (e) {
 			console.error(e);
-			state = 'error';
+			readyState = 'error';
 		}
 	}
 </script>
@@ -46,7 +54,7 @@
 	<div class="container is-max-desktop">
 		<section class="section">
 			<h2 class="title has-text-centered pb-4">Let's chat</h2>
-			{#if state === 'success'}
+			{#if readyState === 'success'}
 				<div transition:fly={{ y: 200, duration: 200 }} class="notification is-success">
 					<div class="is-flex is-align-items-center">
 						<span class="icon"><Fa icon={faCheck} /></span>
@@ -55,7 +63,7 @@
 						>
 					</div>
 				</div>
-			{:else if state === 'error'}
+			{:else if readyState === 'error'}
 				<div transition:fly={{ y: 200, duration: 200 }} class="notification is-danger">
 					An unexpected error occurred. Please <a href="mailto:hello@brushtail.digital"
 						>contact us</a
@@ -67,7 +75,7 @@
 					transition:fly={{ y: 200, duration: 200 }}
 					method="POST"
 					action="/contact"
-					on:submit|preventDefault={submit}
+					onsubmit={submit}
 				>
 					<div class="field">
 						<label class="label" for="input-name">Name</label>
@@ -137,7 +145,9 @@
 
 					<div class="py-4">
 						<p>
-							By submitting this form, you agree to our <a href="/privacy-policy">Privacy Policy</a>
+							By submitting this form, you agree to our <a href={resolve('/privacy-policy')}
+								>Privacy Policy</a
+							>
 							and consent to receive e-mails from Brushtail Digital.
 							<br />
 							You can unsubscribe at any time.

@@ -3,6 +3,8 @@
 	import Expertise from '$lib/Expertise.svelte';
 	import Footer from '$lib/Footer.svelte';
 	import Hero from '$lib/Hero.svelte';
+
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -14,7 +16,7 @@
 	<Expertise />
 	<Contact />
 </main>
-<Footer />
+<Footer year={data.year} />
 
 <style>
 </style>

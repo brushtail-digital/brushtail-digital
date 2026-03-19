@@ -3,20 +3,24 @@
 </script>
 
 <script>
+	/* global turnstile */
 	import { onMount } from 'svelte';
 
-	/** @type {string} */
-	export let sitekey;
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} sitekey
+	 * @property {(token: string) => void} onGetToken
+	 */
 
-	/** @type {string | null} */
-	export let token = null;
+	/** @type {Props} */
+	let { sitekey, onGetToken } = $props();
 
 	/**
-	 * @type {HTMLDivElement}
+	 * @type {HTMLDivElement | undefined}
 	 */
-	let element;
+	let element = $state();
 
-	let didLoadScript = false;
+	let didLoadScript = $state(false);
 
 	onMount(() => {
 		if (!loaded) {
@@ -37,25 +41,15 @@
 		}
 	});
 
-	/**
-	 *
-	 * @param element {HTMLDivElement | undefined}
-	 * @param _didLoadScript {boolean}
-	 */
-	function init(element, _didLoadScript) {
-		if (!element || !loaded) {
+	$effect(() => {
+		if (!element || (!loaded && !didLoadScript)) {
 			return;
 		}
-
 		turnstile.render(element, {
 			sitekey,
-			callback: (t) => {
-				token = t;
-			}
+			callback: onGetToken
 		});
-	}
-
-	$: init(element, didLoadScript);
+	});
 </script>
 
 <div bind:this={element}></div>

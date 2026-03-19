@@ -1,4 +1,6 @@
 <script>
+	import { resolve } from '$app/paths';
+
 	/**
 	 * @param e {MouseEvent}
 	 */
@@ -16,7 +18,7 @@
 		<nav class="navbar">
 			<div class="container">
 				<div class="navbar-brand">
-					<a href="/" class="navbar-item logo">
+					<a href={resolve('/')} class="navbar-item logo">
 						<img src="/logo-dark.svg" alt="Brushtail Digital" />
 					</a>
 				</div>
@@ -31,9 +33,7 @@
 				Experts in web technologies and software development.
 			</p>
 			<p>
-				<a class="button is-success mt-4" href="#expertise" on:click|preventDefault={doScroll}
-					>Find out more</a
-				>
+				<a class="button is-success mt-4" href="#expertise" onclick={doScroll}>Find out more</a>
 			</p>
 		</div>
 	</div>

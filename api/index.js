@@ -31,7 +31,7 @@ app.post(
 	async (c) => {
 		const data = c.req.valid('json');
 
-        // Check Turnstile token
+		// Check Turnstile token
 		const info = getConnInfo(c);
 		const url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 		const result = await fetch(url, {
@@ -51,7 +51,7 @@ app.post(
 			return c.json({ success: false });
 		}
 
-        // Send e-mail
+		// Send e-mail
 		const msg = {
 			subject: 'Brushtail Digital website enquiry',
 			personalizations: [

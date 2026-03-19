@@ -1,8 +1,9 @@
 <script>
+	import { resolve } from '$app/paths';
 	import { page } from '$app/stores';
 
 	// @ts-ignore
-	$: message = $page.error.message;
+	let message = $derived($page.error.message);
 </script>
 
 <main>
@@ -13,7 +14,7 @@
 				{message}
 			</p>
 			<p class="mt-4">
-				Click <a href="/">here</a> to return to the home page.
+				Click <a href={resolve('/')}>here</a> to return to the home page.
 			</p>
 		</section>
 	</div>

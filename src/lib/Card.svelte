@@ -1,8 +1,7 @@
 <script>
 	import Fa from 'svelte-fa';
 
-	export let title;
-	export let icon;
+	let { title, icon, children } = $props();
 </script>
 
 <div class="card">
@@ -15,7 +14,7 @@
 		</div>
 	</header>
 	<div class="card-content">
-		<div class="content"><slot /></div>
+		<div class="content">{@render children?.()}</div>
 	</div>
 </div>
 

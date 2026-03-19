@@ -1,19 +1,22 @@
 <script>
+	import { resolve } from '$app/paths';
 	import Footer from '$lib/Footer.svelte';
 	import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
+
+	let { children, data } = $props();
 </script>
 
 <nav class="navbar is-black theme-dark">
 	<div class="navbar-brand">
-		<a href="/" class="navbar-item logo">
+		<a href={resolve('/')} class="navbar-item logo">
 			<img class="logo-dark" src="/logo-dark.svg" alt="Brushtail Digital" />
 		</a>
 	</div>
 	<div class="navbar-menu">
 		<div class="navbar-end">
 			<div class="navbar-item">
-				<a href="/#contact" class="button is-success">
+				<a href={resolve('/#contact')} class="button is-success">
 					<span class="icon">
 						<Fa icon={faEnvelope} />
 					</span>
@@ -27,12 +30,12 @@
 <main>
 	<div class="container is-max-desktop">
 		<section class="section content">
-			<slot />
+			{@render children?.()}
 		</section>
 	</div>
 </main>
 
-<Footer />
+<Footer year={data.year} />
 
 <style>
 	.navbar {
